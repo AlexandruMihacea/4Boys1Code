@@ -1,6 +1,20 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
+class null_exception : public exception
+{
+public:
+	null_exception()
+	{
+
+	}
+	null_exception(const char* message) : exception(message)
+	{
+
+	}
+};
+
 class Citeste
 {
 	virtual void citeste() = 0;
@@ -11,7 +25,7 @@ public:
 	virtual void afiseaza() = 0;
 };
 
-class coloana_int : public Afiseaza , public Citeste
+class coloana_int : public Afiseaza, public Citeste
 {
 private:
 	int v[100];
@@ -19,20 +33,20 @@ private:
 	int* x;
 	string nume_coloana;
 public:
-	coloana_int(int dimensiune_x ,int* x,string nume_coloana)
+	coloana_int(int dimensiune_x, int* x, string nume_coloana)
 	{
 		this->dimensiune_x = dimensiune_x;
 		this->nume_coloana = nume_coloana;
 		this->x = new int[dimensiune_x];
-			for (int i = 0; i < dimensiune_x; i++)
-			{
-				this->x[i] = x[i];
-			}
+		for (int i = 0; i < dimensiune_x; i++)
+		{
+			this->x[i] = x[i];
+		}
 	}
 
 	coloana_int(const coloana_int& s)
 	{
-		
+
 		nume_coloana = s.nume_coloana;
 		if (s.dimensiune_x > 0)
 		{
@@ -64,6 +78,17 @@ public:
 		return*this;
 
 	}
+
+	int& operator[](int index)
+	{
+		if (index >= 0 && index < dimensiune_x)
+		{
+			return x[index];
+		}
+		//aruncare exceptie
+		throw exception("index invalid");
+	}
+
 	void setNumeColoana(string nume_coloana)
 	{
 		if (nume_coloana != "")
@@ -92,12 +117,11 @@ public:
 	void afiseaza() override
 	{
 		cout << "nume coloana: " << nume_coloana << endl;
-
-		for (int i = 0; i < dimensiune_x; i++)
-		{
-			cout << "Linia " << i << ": "<< x[i]<< endl;
-
-		}
+		if (x != nullptr)
+			for (int i = 0; i < dimensiune_x; i++)
+			{
+				cout << "Linia " << i << ": " << x[i] << endl;
+			}
 
 	}
 
@@ -105,11 +129,20 @@ public:
 	{
 		cout << "nume coloana: ";
 		cin >> nume_coloana;
+		while (nume_coloana == "") {
+			cout << "nume coloana: ";
+			cin >> nume_coloana;
+		}
+
 		for (int i = 0; i < dimensiune_x; i++)
 		{
 			cout << "Linia " << i << ": ";
 			cin >> x[i];
-
+			while (x[i] >= 0)
+			{
+				cout << "Linia " << i << ": ";
+				cin >> x[i];
+			}
 		}
 
 	}
@@ -125,8 +158,8 @@ public:
 
 ostream& operator<<(ostream& out, coloana_int s)
 {
-    out << "Nume coloana: " << s.nume_coloana << endl;
-	for (int i = 0 ; i < s.dimensiune_x; i++)
+	out << "Nume coloana: " << s.nume_coloana << endl;
+	for (int i = 0; i < s.dimensiune_x; i++)
 	{
 		out << "Valoare : " << s.x[i] << endl;
 	}
@@ -145,7 +178,7 @@ istream& operator>>(istream& in, coloana_int& s)
 	return in;
 }
 
-class coloana_string : public Afiseaza , public Citeste
+class coloana_string : public Afiseaza, public Citeste
 {
 private:
 	int v[100];
@@ -199,6 +232,16 @@ public:
 
 	}
 
+	string& operator[](int index)
+	{
+		if (index >= 0 && index < dimensiune_y)
+		{
+			return y[index];
+		}
+		//aruncare exceptie
+		throw exception("index invalid");
+	}
+
 	void setNumeColoana(string nume_coloana)
 	{
 		if (nume_coloana != "")
@@ -239,10 +282,20 @@ public:
 	{
 		cout << "nume coloana: ";
 		cin >> nume_coloana;
+		while (nume_coloana == "") {
+			cout << "nume coloana: ";
+			cin >> nume_coloana;
+		}
+
 		for (int i = 0; i < dimensiune_y; i++)
 		{
 			cout << "Linia " << i << ": ";
 			cin >> y[i];
+			while (y[i] != "")
+			{
+				cout << "Linia " << i << ": ";
+				cin >> y[i];
+			}
 
 		}
 
@@ -259,7 +312,7 @@ ostream& operator<<(ostream& out, coloana_string s)
 	{
 		out << "Valoare : " << s.y[i] << endl;
 	}
-	return out; 
+	return out;
 }
 
 istream& operator>>(istream& in, coloana_string& s)
@@ -275,7 +328,7 @@ istream& operator>>(istream& in, coloana_string& s)
 }
 
 
-class coloana_date: public Afiseaza , public Citeste
+class coloana_date : public Afiseaza, public Citeste
 {
 private:
 	int v[100];
@@ -329,6 +382,15 @@ public:
 
 	}
 
+	time_t& operator[](int index)
+	{
+		if (index >= 0 && index < dimensiune_data)
+		{
+			return data[index];
+		}
+		throw exception("index invalid");
+	}
+
 	void setNumeColoana(string nume_coloana)
 	{
 		if (nume_coloana != "")
@@ -337,7 +399,7 @@ public:
 		}
 	}
 
-	char getColoane()
+	time_t getColoane()
 	{
 		if (dimensiune_data > 0)
 		{
@@ -368,11 +430,15 @@ public:
 	{
 		cout << "nume coloana: ";
 		cin >> nume_coloana;
+		while (nume_coloana == "") {
+			cout << "nume coloana: ";
+			cin >> nume_coloana;
+		}
+
 		for (int i = 0; i < dimensiune_data; i++)
 		{
 			cout << "Linia " << i << ": ";
 			cin >> data[i];
-
 		}
 
 	}
@@ -404,9 +470,9 @@ istream& operator>>(istream& in, coloana_date& s)
 
 }
 
-class coloana_char : public Afiseaza , public Citeste
+class coloana_char : public Afiseaza, public Citeste
 {
-private: 
+private:
 	int v[100];
 	int dimensiune_c;
 	char* c;
@@ -419,7 +485,7 @@ public:
 		this->nume_coloana = nume_coloana;
 		this->c = new char[dimensiune_c + 1];
 		strcpy_s(this->c, dimensiune_c + 1, c);
-		
+
 	}
 
 	coloana_char(const coloana_char& s)
@@ -430,7 +496,7 @@ public:
 		{
 			dimensiune_c = s.dimensiune_c;
 			this->c = new char[dimensiune_c + 1];
-			strcpy_s(this->c, dimensiune_c + 1, c);
+			strcpy_s(this->c, dimensiune_c + 1, s.c);
 
 		}
 	}
@@ -446,12 +512,22 @@ public:
 		{
 			this->dimensiune_c = s.dimensiune_c;
 			this->c = new char[dimensiune_c + 1];
-			strcpy_s(this->c, dimensiune_c + 1, c);
+			strcpy_s(this->c, dimensiune_c + 1, s.c);
 
 		}
 		return*this;
 
 	}
+
+	char& operator[](int index)
+	{
+		if (index >= 0 && index < dimensiune_c)
+		{
+			return c[index];
+		}
+		throw exception("index invalid");
+	}
+
 	~coloana_char()
 	{
 		delete[] c;
@@ -473,10 +549,20 @@ public:
 	{
 		cout << "nume coloana: ";
 		cin >> nume_coloana;
+		while (nume_coloana == "") {
+			cout << "nume coloana: ";
+			cin >> nume_coloana;
+		}
+
 		for (int i = 0; i < dimensiune_c; i++)
 		{
 			cout << "Linia " << i << ": ";
 			cin >> c[i];
+			while (c[i] != ' ')
+			{
+				cout << "Linia " << i << ": ";
+				cin >> c[i];
+			}
 
 		}
 
@@ -509,9 +595,12 @@ istream& operator>>(istream& in, coloana_char& s)
 
 }
 
+// Pentru fiecare atribut se defineste o interfata publica(functii accesor) ce permite citirea si scrierea valorii; functiile 
+// de modificare trebuie sa contina minim o regula de validare a valorii
 class tabela
 {
 private:
+	const string nume_bd="ProiectPoo";
 	int v[100];
 	coloana_int** intregi;                // intregi[0].nume = "VARSTA";
 	int nr_atribute_intregi;              // intregi[0].x[0] = 18; - prima varsta din coloana VARSTE
@@ -521,16 +610,17 @@ private:
 	int nr_atribute_date;
 	int nr_inregistrari;
 	coloana_char** charuri;
-	int nr_atribute;
+	int nr_atribute_char;
+	static string admin;
+	
 public:
 	friend class coloana_int;
 	friend class coloana_string;
 	friend class coloana_date;
 	friend class cloana_char;
-	
-
 
 };
+string tabela::admin = "localhost";
 string* removeDupWord(string str, string* cuvinte, int& marime)
 {
 	string word = "";
@@ -574,13 +664,6 @@ int main()
 	}
 
 	delete[] cuvinte;
-
-
 }
-
-//
-
-
-
 
 
