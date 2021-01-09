@@ -183,6 +183,162 @@ istream& operator>>(istream& in, coloana_int& s)
     return in;
 }
 
+class coloana_float : public Afiseaza, public Citeste
+{
+private:
+    float v[100];
+    float dimensiune_w;
+    float* w;
+    string nume_coloana;
+public:
+    coloana_float(float dimensiune_w, float* w, string nume_coloana)
+    {
+        this->dimensiune_w = dimensiune_w;
+        this->nume_coloana = nume_coloana;
+        this->w = new float[dimensiune_w];
+        for (int i = 0; i < dimensiune_w; i++)
+        {
+            this->w[i] = w[i];
+        }
+    }
+
+    coloana_float(const coloana_float& s)
+    {
+
+        nume_coloana = s.nume_coloana;
+        if (s.dimensiune_w > 0)
+        {
+            dimensiune_w = s.dimensiune_w;
+            w = new float[s.dimensiune_w];
+            for (int i = 0; i < s.dimensiune_w; i++)
+            {
+                w[i] = s.w[i];
+            }
+        }
+    }
+
+    coloana_float& operator=(const coloana_float& s)
+    {
+        if (w != nullptr)
+        {
+            delete[] w;
+        }
+        this->nume_coloana = s.nume_coloana;
+        if (s.dimensiune_w > 0)
+        {
+            this->dimensiune_w = s.dimensiune_w;
+            this->w = new float[s.dimensiune_w];
+            for (int i = 0; i < s.dimensiune_w; i++)
+            {
+                this->w[i] = s.w[i];
+            }
+        }
+        return*this;
+
+    }
+
+    float& operator[](int index)
+    {
+        if (index >= 0 && index < dimensiune_w)
+        {
+            return w[index];
+        }
+        //aruncare exceptie
+        throw exception("index invalid");
+    }
+
+    void setNumeColoana(string nume_coloana)
+    {
+        if (nume_coloana != "")
+        {
+            this->nume_coloana = nume_coloana;
+        }
+    }
+
+    int getColoane()
+    {
+        if (dimensiune_w > 0)
+        {
+            for (int i = 0; i < dimensiune_w; i++)
+            {
+                return w[i];
+            }
+        }
+    }
+
+
+    ~coloana_float()
+    {
+        delete[] w;
+    }
+
+    void afiseaza() override
+    {
+        cout << "nume coloana: " << nume_coloana << endl;
+        if (w != nullptr)
+            for (int i = 0; i < dimensiune_w; i++)
+            {
+                cout << "Linia " << i << ": " << w[i] << endl;
+            }
+
+    }
+
+    void citeste() override
+    {
+        cout << "nume coloana: ";
+        cin >> nume_coloana;
+        while (nume_coloana == "") {
+            cout << "nume coloana: ";
+            cin >> nume_coloana;
+        }
+
+        for (int i = 0; i < dimensiune_w; i++)
+        {
+            cout << "Linia " << i << ": ";
+            cin >> w[i];
+            while (w[i] >= 0)
+            {
+                cout << "Linia " << i << ": ";
+                cin >> w[i];
+            }
+        }
+
+    }
+    void setDimensiuneX(int dimensiune)
+    {
+        dimensiune_w = dimensiune;
+    }
+    int getDimensiune()
+    {
+        return dimensiune_w;
+    }
+
+    friend ostream& operator<<(ostream&, coloana_float);
+    friend istream& operator>>(istream&, coloana_float&);
+};
+
+ostream& operator<<(ostream& out, coloana_float s)
+{
+    out << "Nume coloana: " << s.nume_coloana << endl;
+    for (int i = 0; i < s.dimensiune_w; i++)
+    {
+        out << "Valoare : " << s.w[i] << endl;
+    }
+    return out;
+}
+
+istream& operator>>(istream& in, coloana_float& s)
+{
+    cout << "Nume coloana: ";
+    in >> s.nume_coloana;
+    for (int i = 0; i < s.dimensiune_w; i++)
+    {
+        cout << "Valoare: ";
+        in >> s.w[i];
+    }
+    return in;
+}
+
 class coloana_string : public Afiseaza, public Citeste
 {
 private:
@@ -314,6 +470,11 @@ public:
     friend ostream& operator<<(ostream&, coloana_string);
     friend istream& operator>>(istream&, coloana_string&);
 };
+
+//istream& operator>>(istream&, coloana_float&)
+//{
+//    // TODO: insert return statement here
+//}
 
 ostream& operator<<(ostream& out, coloana_string s)
 {
@@ -613,14 +774,14 @@ private:
     const string nume_bd = "ProiectPoo";
     int v[100];
     coloana_int** intregi;                // intregi[0].nume = "VARSTA";
-    int nr_atribute_intregi=0;              // intregi[0].x[0] = 18; - prima varsta din coloana VARSTE
+    int nr_atribute_intregi = 0;              // intregi[0].x[0] = 18; - prima varsta din coloana VARSTE
     coloana_string** stringuri;           // intregi[0].x[1] = 19;
-    int nr_atribute_string=0;               // intregi[1].nume =  "NOTE";
+    int nr_atribute_string = 0;               // intregi[1].nume =  "NOTE";
     //coloana_date** date;              // intregi[1].x[0] = 10; - prima nota din coloana NOTE
     //int nr_atribute_date=0;
-    int nr_inregistrari=0;
+    int nr_inregistrari = 0;
     coloana_char** charuri;
-    int nr_atribute_char=0;
+    int nr_atribute_char = 0;
     static string admin;
 
 public:
@@ -633,7 +794,7 @@ public:
     {
         string nume_tabela = cuvinte[2];
         int i = 0;
-        for(i =3; i<cuvinte->length();i+=4)
+        for (i = 3; i < cuvinte->length(); i += 4)
         {
             if (cuvinte[i + 1] == "int")
             {
@@ -661,9 +822,9 @@ string tabela::admin = "localhost";
 class CREATE_TABLE
 {
 public:
-    
+
     //string nume_tabela = cuvinte[2];
-    
+
 };
 
 string* removeDupWord(string str, string* cuvinte, int& marime)
@@ -705,7 +866,7 @@ int main()
     cuvinte = new string[100];
     removeDupWord(x, cuvinte, i);
     //cuvinte = new string[i];
-    int nr_cuvinte= cuvinte->length();
+    int nr_cuvinte = cuvinte->length();
     cout << "numar cuvinte: " << nr_cuvinte << endl;
     for (int k = 0; k < i; k++)
     {
@@ -731,3 +892,4 @@ int main()
 
     delete[] cuvinte;
 }
+
