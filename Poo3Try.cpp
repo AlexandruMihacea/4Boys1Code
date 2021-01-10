@@ -889,7 +889,7 @@ int main()
     //default:
     //    // code block
     //}
-
+ 
     delete[] cuvinte;
 }
 
