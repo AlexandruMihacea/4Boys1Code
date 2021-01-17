@@ -63,6 +63,7 @@ public:
             for (int i = 0; i < dimensiune_x; i++)
                 cout << x[i] << endl;
         }
+        return x;
     }
     coloana_int(const coloana_int& s)
     {
@@ -196,160 +197,160 @@ istream& operator>>(istream& in, coloana_int& s)
 }
 
 class coloana_float : public Afiseaza, public Citeste
- {
- private:
-     float v[100];
-     float dimensiune_w;
-     float* w;
-     string nume_coloana;
- public:
-     coloana_float(float dimensiune_w, float* w, string nume_coloana)
-     {
-         this->dimensiune_w = dimensiune_w;
-         this->nume_coloana = nume_coloana;
-         this->w = new float[dimensiune_w];
-         for (int i = 0; i < dimensiune_w; i++)
-         {
-             this->w[i] = w[i];
-         }
-     }
+{
+private:
+    float v[100];
+    float dimensiune_w;
+    float* w;
+    string nume_coloana;
+public:
+    coloana_float(float dimensiune_w, float* w, string nume_coloana)
+    {
+        this->dimensiune_w = dimensiune_w;
+        this->nume_coloana = nume_coloana;
+        this->w = new float[dimensiune_w];
+        for (int i = 0; i < dimensiune_w; i++)
+        {
+            this->w[i] = w[i];
+        }
+    }
 
-     coloana_float(const coloana_float& s)
-     {
+    coloana_float(const coloana_float& s)
+    {
 
-         nume_coloana = s.nume_coloana;
-         if (s.dimensiune_w > 0)
-         {
-             dimensiune_w = s.dimensiune_w;
-             w = new float[s.dimensiune_w];
-             for (int i = 0; i < s.dimensiune_w; i++)
-             {
-                 w[i] = s.w[i];
-             }
-         }
-     }
+        nume_coloana = s.nume_coloana;
+        if (s.dimensiune_w > 0)
+        {
+            dimensiune_w = s.dimensiune_w;
+            w = new float[s.dimensiune_w];
+            for (int i = 0; i < s.dimensiune_w; i++)
+            {
+                w[i] = s.w[i];
+            }
+        }
+    }
 
-     coloana_float& operator=(const coloana_float& s)
-     {
-         if (w != nullptr)
-         {
-             delete[] w;
-         }
-         this->nume_coloana = s.nume_coloana;
-         if (s.dimensiune_w > 0)
-         {
-             this->dimensiune_w = s.dimensiune_w;
-             this->w = new float[s.dimensiune_w];
-             for (int i = 0; i < s.dimensiune_w; i++)
-             {
-                 this->w[i] = s.w[i];
-             }
-         }
-         return*this;
+    coloana_float& operator=(const coloana_float& s)
+    {
+        if (w != nullptr)
+        {
+            delete[] w;
+        }
+        this->nume_coloana = s.nume_coloana;
+        if (s.dimensiune_w > 0)
+        {
+            this->dimensiune_w = s.dimensiune_w;
+            this->w = new float[s.dimensiune_w];
+            for (int i = 0; i < s.dimensiune_w; i++)
+            {
+                this->w[i] = s.w[i];
+            }
+        }
+        return*this;
 
-     }
+    }
 
-     float& operator[](int index)
-     {
-         if (index >= 0 && index < dimensiune_w)
-         {
-             return w[index];
-         }
-         //aruncare exceptie
-         throw exception("index invalid");
-     }
+    float& operator[](int index)
+    {
+        if (index >= 0 && index < dimensiune_w)
+        {
+            return w[index];
+        }
+        //aruncare exceptie
+        throw exception("index invalid");
+    }
 
-     void setNumeColoana(string nume_coloana)
-     {
-         if (nume_coloana != "")
-         {
-             this->nume_coloana = nume_coloana;
-         }
-     }
+    void setNumeColoana(string nume_coloana)
+    {
+        if (nume_coloana != "")
+        {
+            this->nume_coloana = nume_coloana;
+        }
+    }
 
-     int getColoane()
-     {
-         if (dimensiune_w > 0)
-         {
-             for (int i = 0; i < dimensiune_w; i++)
-             {
-                 return w[i];
-             }
-         }
-     }
+    int getColoane()
+    {
+        if (dimensiune_w > 0)
+        {
+            for (int i = 0; i < dimensiune_w; i++)
+            {
+                return w[i];
+            }
+        }
+    }
 
 
-     ~coloana_float()
-     {
-         delete[] w;
-     }
+    ~coloana_float()
+    {
+        delete[] w;
+    }
 
-     void afiseaza() override
-     {
-         cout << "nume coloana: " << nume_coloana << endl;
-         if (w != nullptr)
-             for (int i = 0; i < dimensiune_w; i++)
-             {
-                 cout << "Linia " << i << ": " << w[i] << endl;
-             }
+    void afiseaza() override
+    {
+        cout << "nume coloana: " << nume_coloana << endl;
+        if (w != nullptr)
+            for (int i = 0; i < dimensiune_w; i++)
+            {
+                cout << "Linia " << i << ": " << w[i] << endl;
+            }
 
-     }
+    }
 
-     void citeste() override
-     {
-         cout << "nume coloana: ";
-         cin >> nume_coloana;
-         while (nume_coloana == "") {
-             cout << "nume coloana: ";
-             cin >> nume_coloana;
-         }
+    void citeste() override
+    {
+        cout << "nume coloana: ";
+        cin >> nume_coloana;
+        while (nume_coloana == "") {
+            cout << "nume coloana: ";
+            cin >> nume_coloana;
+        }
 
-         for (int i = 0; i < dimensiune_w; i++)
-         {
-             cout << "Linia " << i << ": ";
-             cin >> w[i];
-             while (w[i] >= 0)
-             {
-                 cout << "Linia " << i << ": ";
-                 cin >> w[i];
-             }
-         }
+        for (int i = 0; i < dimensiune_w; i++)
+        {
+            cout << "Linia " << i << ": ";
+            cin >> w[i];
+            while (w[i] >= 0)
+            {
+                cout << "Linia " << i << ": ";
+                cin >> w[i];
+            }
+        }
 
-     }
-     void setDimensiuneX(int dimensiune)
-     {
-         dimensiune_w = dimensiune;
-     }
-     int getDimensiune()
-     {
-         return dimensiune_w;
-     }
+    }
+    void setDimensiuneX(int dimensiune)
+    {
+        dimensiune_w = dimensiune;
+    }
+    int getDimensiune()
+    {
+        return dimensiune_w;
+    }
 
-     friend ostream& operator<<(ostream&, coloana_float);
-     friend istream& operator>>(istream&, coloana_float&);
- };
+    friend ostream& operator<<(ostream&, coloana_float);
+    friend istream& operator>>(istream&, coloana_float&);
+};
 
- ostream& operator<<(ostream& out, coloana_float s)
- {
-     out << "Nume coloana: " << s.nume_coloana << endl;
-     for (int i = 0; i < s.dimensiune_w; i++)
-     {
-         out << "Valoare : " << s.w[i] << endl;
-     }
-     return out;
- }
+ostream& operator<<(ostream& out, coloana_float s)
+{
+    out << "Nume coloana: " << s.nume_coloana << endl;
+    for (int i = 0; i < s.dimensiune_w; i++)
+    {
+        out << "Valoare : " << s.w[i] << endl;
+    }
+    return out;
+}
 
- istream& operator>>(istream& in, coloana_float& s)
- {
-     cout << "Nume coloana: ";
-     in >> s.nume_coloana;
-     for (int i = 0; i < s.dimensiune_w; i++)
-     {
-         cout << "Valoare: ";
-         in >> s.w[i];
-     }
-     return in;
- }
+istream& operator>>(istream& in, coloana_float& s)
+{
+    cout << "Nume coloana: ";
+    in >> s.nume_coloana;
+    for (int i = 0; i < s.dimensiune_w; i++)
+    {
+        cout << "Valoare: ";
+        in >> s.w[i];
+    }
+    return in;
+}
 
 
 
@@ -375,6 +376,15 @@ public:
     {
         y[i] = nume_coloana;
     }
+
+    string getY(int index)
+    {
+        if (index >= 0 && index < dimensiune_y && y != nullptr)
+        {
+            return y[index];
+        }
+    }
+
     coloana_string(const coloana_string& s)
     {
 
@@ -428,6 +438,11 @@ public:
         }
     }
 
+    string getNumeColoana()
+    {
+        return nume_coloana;
+    }
+
     string getColoane()
     {
         if (dimensiune_y > 0)
@@ -442,6 +457,11 @@ public:
     void setDimensiuneY(int dimensiune)
     {
         dimensiune_y = dimensiune;
+    }
+
+    int getDimensiuneY()
+    {
+        return dimensiune_y;
     }
 
     ~coloana_string()
@@ -798,6 +818,7 @@ private:
     coloana_char** charuri;
     int nr_atribute_char = 0;
     static string admin;
+    string nume_tabela = "";
 
 public:
     friend class coloana_int;
@@ -806,194 +827,168 @@ public:
     friend class cloana_char;
     string* valoare_implicita;
     //create table student (  (nume, string,  3, ""), (varsta, int, 3, 1)   )
-        void Create_Table(string* cuvinte)
+    void Create_Table(string* cuvinte)
+    {
+        if (cuvinte[0] != "create" || cuvinte[1] != "table")
         {
-            if (cuvinte[0] != "create" || cuvinte[1] != "table")
-            {
-                throw exception("Comanda ''create table'' invalida! ");
-            }
-            else
-            {
-                string nume_tabela = cuvinte[2];
-                int i = 0;
-                for (i = 3; i < cuvinte->length(); i += 4)
-                {
-                    if (cuvinte[i + 1] == "int")
-                    {
-                        intregi[nr_atribute_intregi]->setNumeColoana(cuvinte[i]);
-                        intregi[nr_atribute_intregi]->setDimensiuneX(stoi(cuvinte[i + 2]));
-                        nr_atribute_intregi++;
-                    }
-                    if (cuvinte[i + 1] == "string")
-                    {
-                        stringuri[nr_atribute_string]->coloana_string::setNumeColoana(cuvinte[i]);
-                        stringuri[nr_atribute_string]->coloana_string::setDimensiuneY(stoi(cuvinte[i + 2]));
-                        nr_atribute_string++;
-                    }
-                    /*if (cuvinte[i + 1] == "float")
-                    {
-                        float[nr_atribute_float]->setNumeColoana(cuvinte[i]);
-                        float[nr_atribute_float]->setDimensiuneZ(stoi(cuvinte[i + 1]));
-                        nr_atribute_float++;
-                    }*/
-                }
-                cout << "Tabela a fost creata.";
-            }
+            throw exception("Comanda ''create table'' invalida! ");
         }
-        void Drop_Table(string* cuvinte)
+        else
         {
-            if (cuvinte[0] != "drop" && cuvinte[1] != "table")
+            string nume_tabela = cuvinte[2];
+            int i = 0;
+            for (i = 3; i < cuvinte->length(); i += 4)
             {
-                throw exception("Comanda ''drop table'' invalida! ");
-            }
-            else
-            {
-                if (nr_atribute_intregi > 0)
+                if (cuvinte[i + 1] == "int")
                 {
-                    for (int i = 0; i < nr_atribute_intregi; i++)
-                    {
-                        delete[] intregi[i];
-                    }
-                    delete[] intregi;
-                    intregi = nullptr;
-                    nr_atribute_intregi = 0;
+                    intregi[nr_atribute_intregi]->setNumeColoana(cuvinte[i]);
+                    intregi[nr_atribute_intregi]->setDimensiuneX(stoi(cuvinte[i + 2]));
+                    nr_atribute_intregi++;
                 }
-                if (nr_atribute_string > 0)
+                if (cuvinte[i + 1] == "string")
                 {
-                    for (int i = 0; i < nr_atribute_string; i++)
-                    {
-                        delete[] stringuri[i];
-                    }
-                    delete[] stringuri;
-                    stringuri = nullptr;
-                    nr_atribute_string = 0;
+                    stringuri[nr_atribute_string]->coloana_string::setNumeColoana(cuvinte[i]);
+                    stringuri[nr_atribute_string]->coloana_string::setDimensiuneY(stoi(cuvinte[i + 2]));
+                    nr_atribute_string++;
                 }
-                if (nr_atribute_char > 0)
+                /*if (cuvinte[i + 1] == "float")
                 {
-                    for (int i = 0; i < nr_atribute_char; i++)
-                    {
-                        delete[] charuri[i];
-                    }
-                    delete[] charuri;
-                    charuri = nullptr;
-                    nr_atribute_string = 0;
-                }
-                /*if (nr_atribute_float > 0)
-                {
-                    for (int i = 0; i < nr_atribute_float; i++)
-                    {
-                        delete[] floaturi[i];
-                    }
-                    delete[] floaturi;
-                    floaturi = nullptr;
-                    nr_atribute_string = 0;
+                    float[nr_atribute_float]->setNumeColoana(cuvinte[i]);
+                    float[nr_atribute_float]->setDimensiuneZ(stoi(cuvinte[i + 1]));
+                    nr_atribute_float++;
                 }*/
-                cout << "Tabela a fost stearsa";
             }
+            cout << "Tabela a fost creata.";
         }
-        void Display_Table(string* cuvinte)
+    }
+    void Drop_Table(string* cuvinte)
+    {
+        if (cuvinte[0] != "drop" && cuvinte[1] != "table")
         {
-            if (cuvinte[0] != "display" && cuvinte[1] != "table")
+            throw exception("Comanda ''drop table'' invalida! ");
+        }
+        else
+        {
+            if (nr_atribute_intregi > 0)
             {
-                throw exception("Comanda ''display table'' invalida! ");
-            }
-            else
-            {
-                for (int i = 0; i < nr_atribute_char; i++) //+nr_atribute_float
-                {
-                    //cout << charuri[i].getNumeColoana();
-                }
                 for (int i = 0; i < nr_atribute_intregi; i++)
                 {
-                    cout << "Nume coloana: " << intregi[i]->getNumeColoanaInt();
-                    for (int j = 0; j < intregi[i]->getDimensiune(); j++)
-                    {
-                        cout << j << " " << intregi[i]->getX();
-                    }
+                    delete[] intregi[i];
                 }
-                //la fel si pt float, string etc
+                delete[] intregi;
+                intregi = nullptr;
+                nr_atribute_intregi = 0;
             }
-        }
-        //create table student (  (nume, string,  3, ""), (varsta, int, 3, 1)   )
-        string* tipuriData(string* cuvinte)
-        {
-            string copie[20]; int k = -1;
-            for (int i = 4; i < cuvinte->length(); i += 4)
+            if (nr_atribute_string > 0)
             {
-                copie[++k] = cuvinte[i];
-            }
-            string* tipData = new string[k];
-            for (int i = 0; i < k; i++)
-            {
-                tipData[i] = copie[i];
-            }
-            return tipData;
-        }
-        //INSERT INTO nume_tabela VALUES((nume, prenume, varsta);
-        void Insert(string* cuvinte,string* tipData)
-        {
-            if (cuvinte[0] != "insert" || cuvinte[1] != "into" || cuvinte[3] != "values")
-            {
-                throw exception("Comanda ''insert'' invalida! ");
-            }
-            else {
-                int contor_int = -1, contor_string = -1, contor_char = -1, contor_float = -1, values = 4;
-                for (int i = 0; i < tipData->length(); i++)
+                for (int i = 0; i < nr_atribute_string; i++)
                 {
-                    if (tipData[i] == "int")
-                    {
-                        intregi[++contor_int]->setX(stoi(cuvinte[values]), contor_int);
-                        values++;
-                    }
-                    if (tipData[i] == "string")
-                    {
-                        stringuri[++contor_string]->setY(cuvinte[values], contor_string);
-                        values++;
-                    }
-                    // mai terbuie pentru float, char
+                    delete[] stringuri[i];
                 }
+                delete[] stringuri;
+                stringuri = nullptr;
+                nr_atribute_string = 0;
             }
-
-        }
-        //DELETE FROM nume_tabela WHERE nume_coloană = valoare
-        void Delete_From_Where(string* cuvinte)
-        {
-            if (cuvinte[0] != "delete" || cuvinte[1] != "from" || cuvinte[3] != "where")
+            if (nr_atribute_char > 0)
             {
-                throw exception("Comanda ''delete'' invalida! ");
-            }
-            else
-            {
-                string nume_coloana = cuvinte[4];
-                int valoare_int = stoi(cuvinte[5]);
-                string valoare = cuvinte[5];
-                float valoare_float = stoi(cuvinte[5]);
-                for (int i = 0; i < nr_atribute_intregi; i++)
+                for (int i = 0; i < nr_atribute_char; i++)
                 {
-                    if (intregi[i]->getNumeColoanaInt() == nume_coloana)
-                    {
-                        for (int j = 0; j < intregi[i]->getDimensiune(); j++)
-                        {
-                            if (intregi[i]->getX(j) == valoare_int)
-                            {
-                                delete[] intregi[i];
-                                delete[] stringuri[i];
-                                delete[] charuri[i];
-                                //delete[] floaturi[i]; - inca nu este creata clasa
-                            }
-                        }
-                    }
+                    delete[] charuri[i];
+                }
+                delete[] charuri;
+                charuri = nullptr;
+                nr_atribute_string = 0;
+            }
+            /*if (nr_atribute_float > 0)
+            {
+                for (int i = 0; i < nr_atribute_float; i++)
+                {
+                    delete[] floaturi[i];
+                }
+                delete[] floaturi;
+                floaturi = nullptr;
+                nr_atribute_string = 0;
+            }*/
+            cout << "Tabela a fost stearsa";
+        }
+    }
+    void Display_Table(string* cuvinte)
+    {
+        if (cuvinte[0] != "display" && cuvinte[1] != "table")
+        {
+            throw exception("Comanda ''display table'' invalida! ");
+        }
+        else
+        {
+            for (int i = 0; i < nr_atribute_char; i++) //+nr_atribute_float
+            {
+                //cout << charuri[i].getNumeColoana();
+            }
+            for (int i = 0; i < nr_atribute_intregi; i++)
+            {
+                cout << "Nume coloana: " << intregi[i]->getNumeColoanaInt();
+                for (int j = 0; j < intregi[i]->getDimensiune(); j++)
+                {
+                    cout << j << " " << intregi[i]->getX();
                 }
             }
-
+            //la fel si pt float, string etc
+        }
+    }
+    //create table student (  (nume, string,  3, ""), (varsta, int, 3, 1)   )
+    string* tipuriData(string* cuvinte)
+    {
+        string copie[20]; int k = -1;
+        for (int i = 4; i < cuvinte->length(); i += 4)
+        {
+            copie[++k] = cuvinte[i];
+        }
+        string* tipData = new string[k];
+        for (int i = 0; i < k; i++)
+        {
+            tipData[i] = copie[i];
+        }
+        return tipData;
+    }
+    //INSERT INTO nume_tabela VALUES((nume, prenume, varsta);
+    void Insert(string* cuvinte, string* tipData)
+    {
+        if (cuvinte[0] != "insert" || cuvinte[1] != "into" || cuvinte[3] != "values")
+        {
+            throw exception("Comanda ''insert'' invalida! ");
+        }
+        else {
+            int contor_int = -1, contor_string = -1, contor_char = -1, contor_float = -1, values = 4;
+            for (int i = 0; i < tipData->length(); i++)
+            {
+                if (tipData[i] == "int")
+                {
+                    intregi[++contor_int]->setX(stoi(cuvinte[values]), contor_int);
+                    values++;
+                }
+                if (tipData[i] == "string")
+                {
+                    stringuri[++contor_string]->setY(cuvinte[values], contor_string);
+                    values++;
+                }
+                // mai terbuie pentru float, char
+            }
         }
 
-
-     void Select(string* cuvinte, string* cuvinte_doi)
+    }
+    //DELETE FROM nume_tabela WHERE nume_coloană = valoare
+    void Delete_From_Where(string* cuvinte)
+    {
+        if (cuvinte[0] != "delete" || cuvinte[1] != "from" || cuvinte[3] != "where")
+        {
+            throw exception("Comanda ''delete'' invalida! ");
+        }
+        else
         {
             string nume_coloana = cuvinte[4];
-            string nume_tabela = cuvinte_doi[4];
             int valoare_int = stoi(cuvinte[5]);
+            string valoare = cuvinte[5];
+            float valoare_float = stoi(cuvinte[5]);
             for (int i = 0; i < nr_atribute_intregi; i++)
             {
                 if (intregi[i]->getNumeColoanaInt() == nume_coloana)
@@ -1002,15 +997,117 @@ public:
                     {
                         if (intregi[i]->getX(j) == valoare_int)
                         {
-                            cout << "Nume Tabela: " << nume_tabela;
-                            cout << "Numele Coloanei: " << nume_coloana;
-                            cout << j << " " << intregi[i]->getX();
+                            delete[] intregi[i];
+                            delete[] stringuri[i];
+                            delete[] charuri[i];
+                            //delete[] floaturi[i]; - inca nu este creata clasa
                         }
                     }
                 }
             }
-
         }
+
+    }
+
+
+    void Select(string* cuvinte, string* cuvinte_doi)
+    {
+        string nume_coloana = cuvinte[4];
+        string nume_tabela = cuvinte_doi[4];
+        int valoare_int = stoi(cuvinte[5]);
+        for (int i = 0; i < nr_atribute_intregi; i++)
+        {
+            if (intregi[i]->getNumeColoanaInt() == nume_coloana)
+            {
+                for (int j = 0; j < intregi[i]->getDimensiune(); j++)
+                {
+                    if (intregi[i]->getX(j) == valoare_int)
+                    {
+                        cout << "Nume Tabela: " << nume_tabela;
+                        cout << "Numele Coloanei: " << nume_coloana;
+                        cout << j << " " << intregi[i]->getX();
+                    }
+                }
+            }
+        }
+
+    }
+
+    void Update(string* cuvinte, string nume_tabela, string nume_coloana_vechi, string modificare, string tip_data, string de_modificat)
+    {
+        if (this->nume_tabela == nume_tabela)
+        {
+            if (tip_data == "int")
+            {
+                for (int i = 0; i < nr_atribute_intregi; i++) {
+                    if (intregi[i]->getNumeColoanaInt() == nume_coloana_vechi)
+                    {
+
+                        if (de_modificat == "nume_coloana")
+                        {
+                            if (intregi[i]->getNumeColoanaInt() == modificare) {
+                                intregi[i]->setNumeColoana(modificare);
+                            }
+                        }
+                        if (de_modificat == "dimensiune_x")
+                        {
+                            if (intregi[i]->getDimensiune() == stoi(modificare)) {
+                                intregi[i]->setDimensiuneX(stoi(modificare));
+                            }
+                        }
+                        if (de_modificat == "valoare x")
+                        {
+                            for (int i = 0; i < intregi[i]->getDimensiune(); i++) {
+                                if (intregi[i]->getX(i) == stoi(modificare))
+                                {
+                                    intregi[i]->setX(stoi(modificare), i);
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            if (tip_data == "string")
+            {
+                for (int i = 0; i < nr_atribute_string; i++) {
+                    if (stringuri[i]->getNumeColoana() == nume_coloana_vechi)
+                    {
+
+                        if (de_modificat == "nume_coloana")
+                        {
+                            if (stringuri[i]->getNumeColoana() == modificare) {
+                                stringuri[i]->setNumeColoana(modificare);
+                            }
+                        }
+                        if (de_modificat == "dimensiune_x")
+                        {
+                            if (stringuri[i]->getDimensiuneY() == stoi(modificare)) {
+                                stringuri[i]->setDimensiuneY(stoi(modificare));
+                            }
+                        }
+                        if (de_modificat == "valoare x")
+                        {
+                            for (int i = 0; i < stringuri[i]->getDimensiuneY(); i++) {
+                                if (stringuri[i]->getY(i) == modificare)
+                                {
+                                    stringuri[i]->setY(modificare, i);
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+        else
+        {
+            cout << "Tabela nu exista";
+        }
+
+    }
 
 };
 string tabela::admin = "localhost";
@@ -1070,7 +1167,7 @@ int main()
     // Identificarea tipului comenzii:
     string tipComanda = cuvinte[0];
     tabela baza_de_date;
-    baza_de_date.Create_Table(cuvinte, x);
+    baza_de_date.Create_Table(cuvinte);
     baza_de_date.Display_Table(cuvinte);
 
     //cout << "tipul comenzii: " << tipComanda;
@@ -1088,6 +1185,3 @@ int main()
 
     delete[] cuvinte;
 }
-
-
-
